@@ -60,7 +60,7 @@ if __name__ == '__main__':
     to_PIL = transforms.ToPILImage()
 
     stages = np.arange(1,len(psnrs)+1)
-    plt.plot(stages,psnrs,label="PSNR")
+    plt.scatter(stages,psnrs,label="PSNR")
     #plt.plot(xs,val_losses,label="Validation Loss")
     plt.title('Salt and Pepper Noise Testing')
     plt.xlabel('Stages')
@@ -71,13 +71,12 @@ if __name__ == '__main__':
     for i in [0,-1,2]:
       im_noisy,im,im_pred = test_images[i]
       fig, (ax1, ax2, ax3) = plt.subplots(1, 3)
-      fig.suptitle('Results using'+str(args.model_path))
       ax1.set_title("Noisy Image")
       ax1.axis("off")
-      ax1.imshow(im_noisy[0].permute(1,2,0),cmap='gray', vmin=0, vmax=255)
+      ax1.imshow(im_noisy[0].permute(1,2,0),cmap = 'gray')
       ax2.set_title("Original Image")
       ax2.axis("off")
-      ax2.imshow(im[0].permute(1,2,0),cmap='gray', vmin=0, vmax=255)
+      ax2.imshow(im[0].permute(1,2,0),cmap="gray")
       ax3.set_title("Restored Image")
       ax3.axis("off")
       # Convert PyTorch tensor to numpy array
@@ -86,5 +85,5 @@ if __name__ == '__main__':
   # Select the first image from the batch
       im_pred_np = im_pred_np[0]
 
-      ax3.imshow(im_pred_np,cmap='gray', vmin=0, vmax=255)
+      ax3.imshow(im_pred_np,cmap="gray")
       fig.savefig('/content/testing_'+str(i)+'.png')
