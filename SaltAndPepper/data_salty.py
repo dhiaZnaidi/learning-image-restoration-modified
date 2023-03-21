@@ -64,7 +64,7 @@ class BSDS300_images_SaltAndPepper(VisionDataset):
             image = np.asarray(image)
             # Randomly pick some pixels in the
             # image for coloring them white
-            number_of_pixels = random.randint(25, 400)
+            number_of_pixels = random.randint(300, 1000)
             for i in range(number_of_pixels):
                 
                 # Pick a random y coordinate
@@ -78,7 +78,7 @@ class BSDS300_images_SaltAndPepper(VisionDataset):
                 
             # Randomly pick some pixels in
             # the image for coloring them black
-            number_of_pixels = random.randint(25 , 400)
+            number_of_pixels = random.randint(300,1000)
             for i in range(number_of_pixels):
                 
                 # Pick a random y coordinate

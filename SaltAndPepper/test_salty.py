@@ -1,3 +1,33 @@
+import matplotlib.pyplot as plt
+
+import torch
+import argparse
+from tqdm import tqdm
+from skimage.metrics import peak_signal_noise_ratio as psnr
+
+from data_salty import BerkeleyLoaderSaltAndPepper
+from model_salty import DiffusionNetSalt
+
+import numpy as np
+
+from torchvision import transforms
+
+def parse_args():
+    parser = argparse.ArgumentParser(description='Test a model.')
+    parser.add_argument('--steps', '-T', type=int, default=8, help='Number of steps of the net')
+    parser.add_argument('--n_filters', '-nf', type=int, default=48, help='Number of filters')
+    parser.add_argument('--filter_size', '-fs', type=int, default=7, help='Size of the filters')
+    parser.add_argument('model_path', help='Path to the model')
+    args = parser.parse_args()
+    return args
+
+def calc_psnr(im_true, im):
+    im_true = im_true.detach().cpu().numpy()[0].transpose((1,2,0))
+    im = im.detach().cpu().numpy()[0].transpose((1,2,0))
+    m = psnr(im_true, im)
+    return m
+
+
 def test(model):
         model.eval()
         test_loader = BerkeleyLoaderSaltAndPepper(train=False, num_workers=2)
@@ -37,5 +67,11 @@ if __name__ == '__main__':
     ax2.imshow(im[0].permute(1,2,0))
     ax3.set_title("Restored Image")
     ax3.axis("off")
-    ax3.imshow(to_PIL(im_pred.squeeze().cpu().numpy()))
+    # Convert PyTorch tensor to numpy array
+    im_pred_np = im_pred.cpu().detach().numpy().transpose(0, 2, 3, 1)
+
+# Select the first image from the batch
+    im_pred_np = im_pred_np[0]
+
+    ax3.imshow(im_pred_np)
     fig.savefig('/content/testing.png')
